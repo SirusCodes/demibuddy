@@ -4,10 +4,10 @@ part 'memories_model.g.dart';
 
 @JsonSerializable()
 class MemoriesModel {
-  final String imageUrl, description, title;
+  final String image, description, title;
 
   const MemoriesModel({
-    required this.imageUrl,
+    required this.image,
     required this.description,
     required this.title,
   });

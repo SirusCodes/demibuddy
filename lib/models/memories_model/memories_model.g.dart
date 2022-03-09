@@ -8,14 +8,14 @@ part of 'memories_model.dart';
 
 MemoriesModel _$MemoriesModelFromJson(Map<String, dynamic> json) =>
     MemoriesModel(
-      imageUrl: json['imageUrl'] as String,
+      image: json['image'] as String,
       description: json['description'] as String,
       title: json['title'] as String,
     );
 
 Map<String, dynamic> _$MemoriesModelToJson(MemoriesModel instance) =>
     <String, dynamic>{
-      'imageUrl': instance.imageUrl,
+      'image': instance.image,
       'description': instance.description,
       'title': instance.title,
     };
