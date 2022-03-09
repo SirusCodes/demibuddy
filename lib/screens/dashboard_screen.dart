@@ -1,3 +1,4 @@
+import 'package:demicare/screens/game_screen.dart';
 import 'package:demicare/screens/my_family_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,10 @@ class DashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           children: [
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const GameScreen()),
+              ),
               icon: const Icon(Icons.games),
               label: const Text("Play Games"),
             ),
