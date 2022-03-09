@@ -1,0 +1,46 @@
+patients{
+    name
+    image
+    phone
+
+    family[]
+    cognitiveGame[]
+    task[]
+}
+
+family{
+    name
+    image
+    email
+    relation
+}
+
+cognitiveGame{
+    date
+    timeTaken
+    score
+}
+
+caretaker{
+    name
+    phone
+    email
+
+    patients[]
+}
+
+task{
+    type{
+        medicine
+        diet
+        calls
+        meet
+        other
+        play
+        sleep
+    }
+    title
+    message
+    date
+    isCompleted
+}

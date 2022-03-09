@@ -1,3 +1,5 @@
+import 'package:demicare/screens/my_family_screen.dart';
+import 'package:demicare/services/wallpaper_service.dart';
 import 'package:flutter/material.dart';
 
 import 'game_screen.dart';
@@ -70,6 +72,13 @@ class DashboardScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(primary: Colors.red.shade400),
               icon: const Icon(Icons.call),
               label: const Text("SOS"),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                changeWallpaper();
+              },
+              icon: const Icon(Icons.image),
+              label: const Text("Change Wallpaper"),
             ),
           ],
         ),
