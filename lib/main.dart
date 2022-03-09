@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DemiBuddy',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(centerTitle: true),
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff024da1)),
       ),
       home: const DashboardScreen(),

@@ -1,3 +1,4 @@
+import 'package:demicare/screens/my_family_screen.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -29,7 +30,10 @@ class DashboardScreen extends StatelessWidget {
               label: const Text("Play Games"),
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MyFamilyScreen()),
+              ),
               icon: const Icon(Icons.family_restroom),
               label: const Text("My Family"),
             ),
