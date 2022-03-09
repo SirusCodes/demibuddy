@@ -77,7 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           children: [
             ElevatedButton.icon(
               onPressed: null,
-              onLongPress: () {},
+              onLongPress: () => _callCareTaker(isSOS: true),
               style: ElevatedButton.styleFrom(primary: Colors.red.shade400),
               icon: const Icon(Icons.notifications_active),
               label: const Text("SOS"),
@@ -132,7 +132,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Future<void> _callCareTaker() async {
+  Future<void> _callCareTaker({bool isSOS = false}) async {
     final userDoc = await getIt.get<Database>().getDocument(
           collectionId: "6228781dd6cc1290324d",
           documentId: userId,
@@ -145,10 +145,12 @@ class _DashboardScreenState extends State<DashboardScreen>
           documentId: caretakerId,
         );
 
-    getIt.get<SharedPreferences>().setInt(
-          _careTakerCallTime,
-          DateTime.now().millisecondsSinceEpoch,
-        );
+    if (!isSOS) {
+      getIt.get<SharedPreferences>().setInt(
+            _careTakerCallTime,
+            DateTime.now().millisecondsSinceEpoch,
+          );
+    }
 
     launch("tel:${careTakerDoc.data["phone"]}");
   }
