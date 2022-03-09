@@ -1,7 +1,11 @@
 import 'package:demicare/screens/dashboard_screen.dart';
+import 'package:demicare/utils/init_get_it.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initGetIt();
   runApp(const MyApp());
 }
 
