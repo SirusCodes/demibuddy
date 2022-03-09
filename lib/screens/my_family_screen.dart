@@ -1,29 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:typed_data';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/family_details_model/family_details_model.dart';
-
-const _mockFamily = [
-  FamilyDetailsModel(
-    imageUrl: "https://thumbs.dreamstime.com/b/woman-portrait-23496008.jpg",
-    name: "Name",
-    number: "1234567890",
-    relation: "brother",
-  ),
-  FamilyDetailsModel(
-    imageUrl: "https://thumbs.dreamstime.com/b/woman-portrait-23496008.jpg",
-    name: "Name",
-    number: "1234567890",
-    relation: "brother",
-  ),
-  FamilyDetailsModel(
-    imageUrl: "https://thumbs.dreamstime.com/b/woman-portrait-23496008.jpg",
-    name: "Name",
-    number: "1234567890",
-    relation: "brother",
-  ),
-];
+import '../utils/init_get_it.dart';
 
 class MyFamilyScreen extends StatelessWidget {
   const MyFamilyScreen({Key? key}) : super(key: key);
@@ -34,17 +17,49 @@ class MyFamilyScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Call Family"),
       ),
-      body: ListView.builder(
-        itemCount: _mockFamily.length,
-        itemBuilder: (context, index) {
-          final data = _mockFamily[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(data.imageUrl),
-            ),
-            title: Text(data.name),
-            subtitle: Text(data.relation),
-            onTap: () => launch("tel:${data.number}"),
+      body: FutureBuilder<DocumentList>(
+        future: getIt.get<Database>().listDocuments(collectionId: "family"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final docList = snapshot.data;
+            return ListView.builder(
+              itemCount: docList!.total,
+              itemBuilder: (context, index) {
+                final data =
+                    docList.convertTo((p0) => FamilyDetailsModel.fromJson(
+                          p0 as Map<String, dynamic>,
+                        ))[index];
+
+                final img = getIt
+                    .get<Storage>()
+                    .getFileView(bucketId: "images", fileId: data.image);
+                return ListTile(
+                  leading: FutureBuilder<Uint8List>(
+                    future: img,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return CircleAvatar(
+                          backgroundImage: MemoryImage(snapshot.data!),
+                        );
+                      }
+
+                      return const CircleAvatar(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                  ),
+                  title: Text(data.name),
+                  subtitle: Text(data.relation),
+                  onTap: () => launch("tel:${data.phone}"),
+                );
+              },
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),

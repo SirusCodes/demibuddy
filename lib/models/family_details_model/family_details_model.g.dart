@@ -8,16 +8,18 @@ part of 'family_details_model.dart';
 
 FamilyDetailsModel _$FamilyDetailsModelFromJson(Map<String, dynamic> json) =>
     FamilyDetailsModel(
-      imageUrl: json['imageUrl'] as String,
+      image: json['image'] as String,
+      email: json['email'] as String,
       name: json['name'] as String,
-      number: json['number'] as String,
+      phone: json['phone'] as String,
       relation: json['relation'] as String,
     );
 
 Map<String, dynamic> _$FamilyDetailsModelToJson(FamilyDetailsModel instance) =>
     <String, dynamic>{
-      'imageUrl': instance.imageUrl,
+      'image': instance.image,
       'name': instance.name,
-      'number': instance.number,
+      'phone': instance.phone,
       'relation': instance.relation,
+      'email': instance.email,
     };

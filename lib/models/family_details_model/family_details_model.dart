@@ -4,12 +4,13 @@ part 'family_details_model.g.dart';
 
 @JsonSerializable()
 class FamilyDetailsModel {
-  final String imageUrl, name, number, relation;
+  final String image, name, phone, relation, email;
 
   const FamilyDetailsModel({
-    required this.imageUrl,
+    required this.image,
+    required this.email,
     required this.name,
-    required this.number,
+    required this.phone,
     required this.relation,
   });
 
