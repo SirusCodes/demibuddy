@@ -36,6 +36,7 @@ dependencies:
   json_annotation: ^4.4.0
   cached_network_image: ^3.2.0
   url_launcher: ^6.0.20
+  appwrite: ^4.0.1
 
 dev_dependencies:
   flutter_test:
