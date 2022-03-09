@@ -1,6 +1,8 @@
 import 'package:demicare/screens/my_family_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'memories_screen.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -38,7 +40,10 @@ class DashboardScreen extends StatelessWidget {
               label: const Text("My Family"),
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MemoriesScreen()),
+              ),
               icon: const Icon(Icons.photo_album),
               label: const Text("Memories"),
             ),
