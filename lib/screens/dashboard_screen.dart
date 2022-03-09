@@ -1,8 +1,9 @@
-import 'package:demicare/screens/game_screen.dart';
-import 'package:demicare/screens/my_family_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'game_screen.dart';
 import 'memories_screen.dart';
+import 'my_family_screen.dart';
+import 'tasks_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -52,9 +53,12 @@ class DashboardScreen extends StatelessWidget {
               label: const Text("Memories"),
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TasksScreen()),
+              ),
               icon: const Icon(Icons.notifications),
-              label: const Text("Notices"),
+              label: const Text("Tasks"),
             ),
             ElevatedButton.icon(
               onPressed: () {},
