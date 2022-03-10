@@ -1,12 +1,12 @@
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:demicare/screens/my_family_screen.dart';
-import 'package:demicare/services/wallpaper_service.dart';
-import 'package:demicare/utils/constants.dart';
-import 'package:demicare/utils/init_get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../services/wallpaper_service.dart';
+import '../utils/constants.dart';
+import '../utils/init_get_it.dart';
 import 'game_screen.dart';
 import 'memories_screen.dart';
 import 'my_family_screen.dart';
@@ -29,7 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     WidgetsBinding.instance!.addObserver(this);
 
     // TODO: remove anon sign
-    // getIt.get<Account>().deleteSessions();
+    getIt.get<Account>().deleteSessions();
     getIt.get<Account>().createAnonymousSession();
   }
 

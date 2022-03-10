@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:demicare/extension/int_ext.dart';
+import 'package:demicare/utils/init_get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:whiteboard/whiteboard.dart';
@@ -74,7 +76,11 @@ class _GameScreenState extends State<GameScreen> {
             if (_shownWords.contains(item)) _count++;
           }
           final _score = _count == 0 ? -1 : _count;
-          print(_score);
+          getIt.get<Database>().createDocument(
+            collectionId: "cognitiveGame",
+            documentId: "unique()",
+            data: {"date": DateTime.now().toIso8601String(), "score": _score},
+          );
           Navigator.pop(context);
         },
         icon: const Icon(Icons.check),
