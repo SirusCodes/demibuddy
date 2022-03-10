@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,8 +59,11 @@ class _DashboardScreenState extends State<DashboardScreen>
 
       var difference = DateTime.now()
           .difference(DateTime.fromMillisecondsSinceEpoch(closeTime));
-      if (difference < const Duration(seconds: 4)) {
-        // TODO: add consoling voice
+      if (difference < const Duration(seconds: 40)) {
+        AssetsAudioPlayer.newPlayer().open(
+          Audio("assets/demibuddy.wav"),
+          autoStart: true,
+        );
       }
 
       getIt.get<SharedPreferences>().remove(_careTakerCallTime);
