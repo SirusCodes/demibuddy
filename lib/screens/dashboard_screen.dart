@@ -1,5 +1,5 @@
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -98,6 +98,11 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
               icon: const Icon(Icons.games),
               label: const Text("Play Games"),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => DeviceApps.openApp("com.ichi2.anki"),
+              icon: const Icon(Icons.games),
+              label: const Text("Play Anki"),
             ),
             ElevatedButton.icon(
               onPressed: () => Navigator.push(
