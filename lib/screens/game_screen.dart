@@ -27,8 +27,23 @@ class _GameScreenState extends State<GameScreen> {
     _time =
         "${(_rand.nextInt(11) + 1).padLeadingZero}:${((_rand.nextInt(11) + 1) * 5).padLeadingZero}";
 
-    _words =
-        List.generate(9, (index) => String.fromCharCode(index + 97)).toSet();
+    _words = {
+      "Banana",
+      "Sunrise",
+      "Chair",
+      "Leader",
+      "Season",
+      "Table",
+      "Village",
+      "Kitchen",
+      "Baby",
+      "River",
+      "Nation",
+      "Finger",
+      "Captain",
+      "Garden",
+      "Picture"
+    };
 
     while (_shownWords.length != 3) {
       _shownWords.add(_words.elementAt(_rand.nextInt(9)));
