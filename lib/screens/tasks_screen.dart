@@ -1,6 +1,12 @@
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
+import 'package:demicare/screens/game_screen.dart';
+import 'package:demicare/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/task_model/task_model.dart';
+import '../utils/init_get_it.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({Key? key}) : super(key: key);
@@ -10,63 +16,7 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  late final List<TaskModel> _mockTask;
-
-  @override
-  void initState() {
-    super.initState();
-    _mockTask = [
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Call",
-        type: TaskType.call,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: true,
-        message: "message",
-        title: "Diet",
-        type: TaskType.diet,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Medicine",
-        type: TaskType.medicine,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Meet",
-        type: TaskType.meet,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Other",
-        type: TaskType.other,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Medicine",
-        type: TaskType.play,
-      ),
-      TaskModel(
-        date: DateTime.now(),
-        isCompleted: false,
-        message: "message",
-        title: "Medicine",
-        type: TaskType.sleep,
-      ),
-    ];
-  }
+  List<TaskModel>? _tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +24,29 @@ class _TasksScreenState extends State<TasksScreen> {
       appBar: AppBar(
         title: const Text("Tasks"),
       ),
-      body: ListView.builder(
-        itemCount: _mockTask.length,
-        itemBuilder: (context, index) {
-          final data = _mockTask[index];
+      body: FutureBuilder<DocumentList>(
+        future: getIt.get<Database>().listDocuments(
+          collectionId: "tasks",
+          queries: [Query.equal("patient", userId)],
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final tasks = snapshot.data;
+            _tasks = tasks!.convertTo(
+              (p0) => TaskModel.fromJson(p0 as Map<String, dynamic>),
+            )..sort((a, b) => a.date.compareTo(b.date));
 
-          return _buildTask(data, index);
+            return ListView.builder(
+              itemCount: tasks.total,
+              itemBuilder: (context, index) {
+                return _buildTask(index);
+              },
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -89,10 +56,8 @@ class _TasksScreenState extends State<TasksScreen> {
     switch (type) {
       case TaskType.medicine:
         return Icons.medication;
-
       case TaskType.diet:
         return Icons.food_bank;
-
       case TaskType.call:
         return Icons.call;
       case TaskType.meet:
@@ -106,7 +71,29 @@ class _TasksScreenState extends State<TasksScreen> {
     }
   }
 
-  Widget _buildTask(TaskModel data, int index) {
+  _actionByType(TaskModel task) {
+    if (task.isCompleted) return;
+    switch (task.type) {
+      case TaskType.call:
+        launch("tel:${task.message}");
+        break;
+      case TaskType.meet:
+        launch(task.message);
+        break;
+      case TaskType.play:
+        return Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const GameScreen()),
+        );
+      case TaskType.medicine:
+      case TaskType.diet:
+      case TaskType.other:
+      case TaskType.sleep:
+    }
+  }
+
+  Widget _buildTask(int index) {
+    final data = _tasks![index];
     return ListTile(
       title: Text(
         data.title,
@@ -117,21 +104,34 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
       ),
       subtitle: Text(data.message),
-      onTap: () {
-        setState(() => _mockTask[index] = data.copyWith(
-              isCompleted: !data.isCompleted,
-            ));
+      onTap: () async {
+        final updatedTask = await _updateTaskStatus(data);
+        setState(() => _tasks![index] = updatedTask);
+        _actionByType(data);
       },
       leading: Icon(_getIconByType(data.type)),
       trailing: Checkbox(
         value: data.isCompleted,
-        onChanged: (value) {
+        onChanged: (value) async {
           if (value == null) return;
-          setState(() => _mockTask[index] = data.copyWith(
-                isCompleted: !data.isCompleted,
-              ));
+          final updatedTask = await _updateTaskStatus(data);
+          setState(() => _tasks![index] = updatedTask);
+          _actionByType(data);
         },
       ),
     );
+  }
+
+  Future<TaskModel> _updateTaskStatus(TaskModel task) {
+    return getIt
+        .get<Database>()
+        .updateDocument(
+          collectionId: "tasks",
+          documentId: task.id,
+          data: task.copyWith(isCompleted: !task.isCompleted).toJson(),
+        )
+        .then((value) => value.convertTo(
+              (p0) => TaskModel.fromJson(p0 as Map<String, dynamic>),
+            ));
   }
 }

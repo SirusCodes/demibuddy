@@ -6,12 +6,15 @@ enum TaskType { medicine, diet, call, meet, other, play, sleep }
 
 @JsonSerializable()
 class TaskModel {
+  @JsonKey(name: r"$id")
+  final String id;
   final String title, message;
   final bool isCompleted;
   final TaskType type;
   final DateTime date;
 
   const TaskModel({
+    required this.id,
     required this.title,
     required this.message,
     required this.isCompleted,
@@ -32,6 +35,7 @@ class TaskModel {
     DateTime? date,
   }) {
     return TaskModel(
+      id: id,
       title: title ?? this.title,
       message: message ?? this.message,
       isCompleted: isCompleted ?? this.isCompleted,

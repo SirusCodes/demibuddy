@@ -11,6 +11,7 @@ Future<void> initGetIt() async {
 
   getIt.registerSingleton(Database(client));
   getIt.registerSingleton(Storage(client));
+  getIt.registerSingleton(Account(client));
 
   final _sharedPref = await SharedPreferences.getInstance();
 

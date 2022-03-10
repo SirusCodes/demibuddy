@@ -17,7 +17,6 @@ family{
 
 cognitiveGame{
     date
-    timeTaken
     score
 }
 

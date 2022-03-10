@@ -27,6 +27,10 @@ class _DashboardScreenState extends State<DashboardScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+
+    // TODO: remove anon sign
+    // getIt.get<Account>().deleteSessions();
+    getIt.get<Account>().createAnonymousSession();
   }
 
   @override
