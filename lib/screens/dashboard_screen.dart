@@ -32,8 +32,6 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     // TODO: remove anon sign
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      // if ((await getIt.get<Account>().get()))
-      //   getIt.get<Account>().createAnonymousSession();
       try {
         log((await getIt.get<Account>().get()).$id);
       } catch (_) {
@@ -80,72 +78,103 @@ class _DashboardScreenState extends State<DashboardScreen>
         data: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             fixedSize: Size.square((size.width - 60) / 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
         ),
-        child: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 15,
-          crossAxisSpacing: 15,
-          padding: const EdgeInsets.all(15),
-          children: [
-            ElevatedButton.icon(
-              onPressed: null,
-              onLongPress: () => _callCareTaker(isSOS: true),
-              style: ElevatedButton.styleFrom(primary: Colors.red.shade400),
-              icon: const Icon(Icons.notifications_active),
-              label: const Text("SOS"),
-            ),
-            ElevatedButton.icon(
-              onPressed: _callCareTaker,
-              icon: const Icon(Icons.call),
-              label: const Text("Call caretaker"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const GameScreen()),
+        child: IconTheme(
+          data: const IconThemeData(size: 35),
+          child: GridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 15,
+            padding: const EdgeInsets.all(15),
+            children: [
+              _buildButton(
+                onPressed: null,
+                onLongPress: () => _callCareTaker(isSOS: true),
+                style: ElevatedButton.styleFrom(primary: Colors.red.shade400),
+                icon: const Icon(Icons.notifications_active),
+                title: "SOS",
               ),
-              icon: const Icon(Icons.games),
-              label: const Text("Play Games"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => DeviceApps.openApp("com.ichi2.anki"),
-              icon: const Icon(Icons.games),
-              label: const Text("Play Anki"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MyFamilyScreen()),
+              _buildButton(
+                onPressed: _callCareTaker,
+                icon: const Icon(Icons.call),
+                title: "Call caretaker",
               ),
-              icon: const Icon(Icons.family_restroom),
-              label: const Text("My Family"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MemoriesScreen()),
+              _buildButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GameScreen()),
+                ),
+                icon: const Icon(Icons.games),
+                title: "Play Games",
               ),
-              icon: const Icon(Icons.photo_album),
-              label: const Text("Memories"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const TasksScreen()),
+              _buildButton(
+                onPressed: () => DeviceApps.openApp("com.ichi2.anki"),
+                icon: const Icon(Icons.games),
+                title: "Play Anki",
               ),
-              icon: const Icon(Icons.notifications),
-              label: const Text("Tasks"),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                changeWallpaper();
-              },
-              icon: const Icon(Icons.image),
-              label: const Text("Change Wallpaper"),
-            ),
-          ],
+              _buildButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MyFamilyScreen()),
+                ),
+                icon: const Icon(Icons.family_restroom),
+                title: "My Family",
+              ),
+              _buildButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MemoriesScreen()),
+                ),
+                icon: const Icon(Icons.photo_album),
+                title: "Memories",
+              ),
+              _buildButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TasksScreen()),
+                ),
+                icon: const Icon(Icons.notifications),
+                title: "Tasks",
+              ),
+              _buildButton(
+                onPressed: () {
+                  changeWallpaper();
+                },
+                icon: const Icon(Icons.image),
+                title: "Change Wallpaper",
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildButton({
+    required Icon icon,
+    required String title,
+    required VoidCallback? onPressed,
+    ButtonStyle? style,
+    VoidCallback? onLongPress,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: style,
+      onLongPress: onLongPress,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          icon,
+          const SizedBox(height: 10),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
