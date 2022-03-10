@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +31,15 @@ class _DashboardScreenState extends State<DashboardScreen>
     WidgetsBinding.instance!.addObserver(this);
 
     // TODO: remove anon sign
-    getIt.get<Account>().deleteSessions();
-    getIt.get<Account>().createAnonymousSession();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      // if ((await getIt.get<Account>().get()))
+      //   getIt.get<Account>().createAnonymousSession();
+      try {
+        log((await getIt.get<Account>().get()).$id);
+      } catch (_) {
+        getIt.get<Account>().createAnonymousSession();
+      }
+    });
   }
 
   @override
